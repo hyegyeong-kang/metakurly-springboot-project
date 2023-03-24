@@ -18,14 +18,12 @@ public class ReviewController {
     private ReviewService service;
 //    private MemberService mService;
 
-
     @GetMapping("/{p_id}/reviews")
-    public String showProductReview(@PathVariable("p_id") Long p_id, Model model) {
+    public List<ProductDTO> showProductReview(@PathVariable("p_id") Long p_id) {
 
 
         List<ProductDTO> productReview = service.getProductReviewList(p_id);
-        model.addAttribute("product", productReview);
-        return "reviews/review";
+        return productReview;
     }
 
     @GetMapping("/{p_id}/reviews/{r_id}")
