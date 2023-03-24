@@ -26,11 +26,8 @@ public class ProductController {
     }
 
     @GetMapping("/{p_id}")
-    public String get(@PathVariable("p_id") Long p_id, Model model) {
-
-        model.addAttribute("product", service.get(p_id));
-        return "products/productDetail";
-
+    public ProductDTO get(@PathVariable("p_id") Long p_id) {
+        return service.get(p_id);
     }
 
     @GetMapping("/bestList")
