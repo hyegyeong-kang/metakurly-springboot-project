@@ -1,0 +1,22 @@
+server:
+  port: 8081
+
+logging:
+  level:
+    org.springframework: DEBUG
+
+spring:
+  messages:
+    basename: message
+
+## OracleDriver ?? ??
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@localhost:1521:XE
+    username: meta01
+    password: meta01
+
+## MyBatis ??
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.metanet.metakurly.dto
