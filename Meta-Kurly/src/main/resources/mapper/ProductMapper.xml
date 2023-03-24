@@ -6,13 +6,13 @@
 <mapper namespace="com.metanet.metakurly.mapper.ProductMapper">
 
     <select id="getList" resultType="com.metanet.metakurly.dto.ProductDTO">
-        <![CDATA[
+    <![CDATA[
 	select p_id, brand, price, name, delivery_type, img_url from product where p_id > 0 and status = '판매중'
 	]]>
     </select>
 
     <select id="getBestProductList" resultType="com.metanet.metakurly.dto.ProductDTO">
-        <![CDATA[
+    <![CDATA[
 	select p_id, brand, price, name, delivery_type, img_url from (select p_id, brand, price, name, delivery_type,
 	img_url from product where p_id > 0 and status = '판매중' order by sales_amount desc) where rownum <= 10
 	]]>

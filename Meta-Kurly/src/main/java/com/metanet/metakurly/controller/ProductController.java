@@ -1,5 +1,6 @@
 package com.metanet.metakurly.controller;
 
+import com.metanet.metakurly.dto.ProductDTO;
 import com.metanet.metakurly.service.ProductService;
 import com.metanet.metakurly.service.ReviewService;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -18,9 +21,8 @@ public class ProductController {
     private ReviewService rService;
 
     @GetMapping("")
-    public String list(Model model) {
-        model.addAttribute("list", service.getList());
-        return "products/productList";
+    public List<ProductDTO> list() {
+        return service.getList();
     }
 
     @GetMapping("/{p_id}")
