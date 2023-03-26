@@ -48,17 +48,13 @@ public class CartController {
         Long p_id = Long.valueOf(productInfo.get("p_id"));
         int quantity = productInfo.get("quantity");
 
-        if (service.checkCart(p_id, 1L) > 0) {
-            cart.setM_id(1L);
-            cart.setP_id(p_id);
-            cart.setQuantity(quantity);
+        cart.setM_id(1L);
+        cart.setP_id(p_id);
+        cart.setQuantity(quantity);
 
+        if (service.checkCart(p_id, 1L) > 0) {
             service.updateCount(cart);
         } else {
-            cart.setM_id(1L);
-            cart.setP_id(p_id);
-            cart.setQuantity(quantity);
-
             service.addCart(cart);
         }
         //return "redirect:/cart/cartList";
