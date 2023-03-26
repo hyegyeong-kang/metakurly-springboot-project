@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.metanet.metakurly.mapper.CartMapper">
+
+
+    <!-- 해당 회원 장바구니 리스트 출력 -->
+    <select id="getMyCartList"
+            resultType="com.metanet.metakurly.dto.CartDTO"
+            resultMap="cartDTO">
+        select c.cartNum, c.m_id, c.p_id, c.quantity, p.name, p.price, p.img_url
+        from cart c, product p
+        where c.p_id = p.p_id
+        and c.m_id = #{m_id}
+    </select>
+
+    <resultMap type="com.metanet.metakurly.dto.CartDTO" id="cartDTO">
+        <result property="m_id" column="m_id"/>
+        <result property="p_id" column="p_id"/>
+        <result property="quantity" column="quantity"/>
+        <collection property="productList" resultMap="productDTO">
+        </collection>
+    </resultMap>
+
+
+<!--    <resultMap type="com.metanet.metakurly.dto.ProductDTO" id="productDTO">-->
+<!--        <result property="p_id" column="p_id"/>-->
+<!--        <result property="name" column="name"/>-->
+<!--        <result property="price" column="price"/>-->
+<!--        <result property="img_url" column="img_url"/>-->
+<!--    </resultMap>-->
+
+
+    <!--  장바구니에 물건 추가 -->
+    <insert id="addCart">
+        insert into cart
+        values (cart_seq.nextval, #{m_id}, #{p_id}, #{quantity})
+    </insert>
+
+    <!-- 장바구니 중복 상품 확인 -->
+    <select id="checkCart" resultType="int">
+        select count(*)
+        from cart
+        where p_id = #{p_id}
+        and m_id = #{m_id}
+    </select>
+
+    <!-- 중복된 상품이 있다면 넣지말고 수량 더해주기 -->
+    <update id="updateCount">
+        update cart c
+        set c.quantity = c.quantity + #{quantity}
+        where c.m_id = #{m_id}
+        and c.p_id = #{p_id}
+    </update>
+
+    <!-- 장바구니 물건 삭제 -->
+    <delete id="deleteCart">
+        delete from cart
+        where p_id = #{p_id}
+        and m_id = #{m_id}
+    </delete>
+
+    <!-- 장바구니 전체 비우기 -->
+    <delete id="deleteAllCart">
+        delete from cart
+        where m_id = #{m_id}
+    </delete>
+
+    <!-- 장바구니 물건 업데이트 (장바구니에서 수량변경하는 것) -->
+    <update id="updateCart" parameterType="com.metanet.metakurly.dto.CartDTO">
+        update cart
+        set quantity = #{quantity}
+        where m_id = #{m_id}
+        and p_id = #{p_id}
+    </update>
+
+    <!-- 해당 회원의 장바구니 전체 금액 출력 -->
+    <select id="getTotalPrice" resultType="Long">
+        select nvl(sum(p.price * quantity), 0) as TOTAL_PRICE
+        from cart c, product p
+        where c.p_id = p.p_id
+        and m_id = #{m_id}
+    </select>
+
+
+</mapper>
