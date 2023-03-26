@@ -9,4 +9,5 @@ public class PaymentDTO {
 	private Long m_id;
 	private String method;
 	private int payment_amount;
+	private int usePoint;
 }
