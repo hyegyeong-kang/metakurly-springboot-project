@@ -8,8 +8,8 @@
         select * from member
     </select>
 
-    <select id="getMemberById" resultType="MemberDTO">
-        select * from member where userid = #{userId} and password = #{password}
+    <select id="getMemberByUserId" resultType="MemberDTO">
+        select * from member where userid = #{userId}
     </select>
 
     <insert id="signUp">
@@ -26,7 +26,7 @@
     <select id="login" resultType="MemberDTO">
         select *
         from member
-        where userid = #{userId} and password = #{password}
+        where userid = #{userId}
     </select>
 
     <update id="modify">

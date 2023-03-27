@@ -19,7 +19,7 @@ public interface MemberMapper {
     //회원가입
     public void signUp(MemberDTO member) throws Exception;
 
-    public MemberDTO getMemberById(MemberDTO member) throws Exception;
+    public MemberDTO getMemberByUserId(String userId) throws Exception;
 
     //로그인
     public MemberDTO login(MemberDTO member) throws Exception;

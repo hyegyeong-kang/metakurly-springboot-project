@@ -5,10 +5,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import com.metanet.metakurly.dto.MemberDTO;
-import com.metanet.metakurly.service.MemberService;
-import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -35,20 +35,30 @@ public class MemberController {
     public void login() {}
 
     @PostMapping("/login")
-    public ResponseEntity<MemberDTO> login(@RequestBody MemberDTO member) throws Exception {
-        //System.out.println(member);
-        MemberDTO memberDTO = service.getMemberById(member);
-        String status = memberDTO.getStatus();
-        HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
-        if (status.equals("active") && memberDTO != null) {
-            System.out.println(memberDTO);
-            memberDTO =  service.login(member);
-            httpStatus = HttpStatus.OK;
-        } else {
-            memberDTO =  null;
+    public ResponseEntity<String> login(@RequestBody MemberDTO member, HttpSession session) throws Exception {
+        MemberDTO dto = service.getMemberByUserId(member.getUserId());
+        String status = member.getStatus();
+
+        if (dto == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("해당하는 사용자가 없습니다.");
         }
 
-        return ResponseEntity.status(httpStatus).body(memberDTO);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        // 암호화된 비밀번호 비교
+        if (!encoder.matches(member.getPassword(), dto.getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 일치하지 않습니다.");
+        }
+
+        session.setAttribute("member", dto);
+
+        return ResponseEntity.ok("로그인 성공");
+
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpSession session) {
+        session.invalidate();
+        return ResponseEntity.ok("로그아웃이 완료되었습니다.");
     }
 
     @GetMapping("/modify")
@@ -66,12 +76,14 @@ public class MemberController {
     @PatchMapping("/delete/{m_id}")
     public void delete(@PathVariable("m_id") Long m_id, @RequestBody MemberDTO member) throws Exception {
         member.setM_id(m_id);
-        service.delete(member);
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        String password = member.getPassword();
+        String encodedPassword = encoder.encode(password);
+        member.setPassword(encodedPassword);
+
+        service.modify(member);
     }
 
-
-//    @PutMapping("/modify/{m_id}")
-//    public void modify(@PathVariable("m_id") Long m_id, @RequestBody MemberDTO member) throws Exception {
-//        service.modify(m_id, member);
-//    }
 }

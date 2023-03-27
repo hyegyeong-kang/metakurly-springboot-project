@@ -9,7 +9,10 @@ spring:
   messages:
     basename: message
 
-## OracleDriver ?? ??
+  main:
+    allow-circular-references: true
+
+  ## OracleDriver ?? ??
   datasource:
     driver-class-name: oracle.jdbc.driver.OracleDriver
     url: jdbc:oracle:thin:@localhost:1521:XE
