@@ -11,7 +11,10 @@ import java.util.List;
 @Service
 public class CartServiceImpl implements CartService{
     @Autowired
-    private CartMapper mapper;
+    private final CartMapper mapper;
+    public CartServiceImpl(CartMapper mapper) {
+        this.mapper = mapper;
+    }
 
 
     // 해당 회원 장바구니 리스트 출력
