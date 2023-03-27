@@ -1,6 +1,7 @@
 package com.metanet.metakurly.controller;
 
 import com.metanet.metakurly.dto.ProductDTO;
+import com.metanet.metakurly.dto.ReviewDTO;
 import com.metanet.metakurly.service.ProductService;
 import com.metanet.metakurly.service.ReviewService;
 import lombok.AllArgsConstructor;
@@ -21,12 +22,23 @@ public class ProductController {
 
     @GetMapping("")
     public List<ProductDTO> list() {
-        return service.getList();
+        List<ProductDTO> productDTO = service.getList();
+        List<ReviewDTO> reviewDTO = (List<ReviewDTO>) new ReviewDTO();
+
+        for (int i = 0; i < productDTO.size(); i++) {
+            reviewDTO = rService.getProductReviewList(productDTO.get(i).getP_id());
+            productDTO.get(i).setReviewList(reviewDTO);
+        }
+
+        return productDTO;
     }
 
     @GetMapping("/{p_id}")
     public ProductDTO get(@PathVariable("p_id") Long p_id) {
-        return service.get(p_id);
+        ProductDTO productDTO = service.get(p_id);
+        List<ReviewDTO> reviewDTO = rService.getProductReviewList(p_id);
+        productDTO.setReviewList(reviewDTO);
+        return productDTO;
     }
 
     @GetMapping("/bestList")

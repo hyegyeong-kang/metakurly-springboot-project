@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -19,20 +18,18 @@ public class ReviewController {
 //    private MemberService mService;
 
     @GetMapping("/{p_id}/reviews")
-    public List<ProductDTO> showProductReview(@PathVariable("p_id") Long p_id) {
-
-
-        List<ProductDTO> productReview = service.getProductReviewList(p_id);
+    public List<ReviewDTO> showProductReview(@PathVariable("p_id") Long p_id) {
+        List<ReviewDTO> productReview = service.getProductReviewList(p_id);
         return productReview;
     }
 
+    /* 수정 필요 */
     @GetMapping("/{p_id}/reviews/{r_id}")
-    public String showReviewDetail(@PathVariable("p_id") Long p_id, @PathVariable("r_id") Long r_id ,Model model, HttpSession session) {
+    public List<ReviewDTO> showReviewDetail(@PathVariable("p_id") Long p_id, @PathVariable("r_id") Long r_id) {
 
-        List<ProductDTO> productReview = service.getProductReviewList(p_id);
-        model.addAttribute("product", productReview);
+        List<ReviewDTO> productReview = service.getProductReviewList(p_id);
 
-        return "reviews/reviewDetail";
+        return productReview;
     }
 
     @GetMapping("/reviews")

@@ -10,7 +10,7 @@ import java.util.List;
 public interface ReviewMapper {
     public List<ReviewDTO> getMyReviewList(int m_id);
 
-    public List<ProductDTO> getProductReviewList(Long p_id);
+    public List<ReviewDTO> getProductReviewList(Long p_id);
 
     public void registerReview(ReviewDTO review);
 

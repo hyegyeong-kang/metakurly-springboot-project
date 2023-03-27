@@ -19,7 +19,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<ProductDTO> getProductReviewList(Long p_id) {
+    public List<ReviewDTO> getProductReviewList(Long p_id) {
         return mapper.getProductReviewList(p_id);
     }
 
