@@ -1,5 +1,6 @@
 package com.metanet.metakurly.service;
 
+import com.metanet.metakurly.dto.MemberDTO;
 import com.metanet.metakurly.mapper.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,8 +13,7 @@ public class MemberServiceImpl implements MemberService{
     @Autowired
     private MemberMapper mapper;
 
-    @Override
-    public List<MemberDTO> getList() throws Exception{
+    public List<MemberDTO> getList() throws Exception {
         return mapper.getList();
     }
 

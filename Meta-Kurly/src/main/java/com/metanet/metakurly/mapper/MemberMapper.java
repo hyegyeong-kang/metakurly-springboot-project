@@ -3,10 +3,15 @@ package com.metanet.metakurly.mapper;
 import org.apache.ibatis.annotations.Mapper;
 
 import javax.servlet.http.HttpSession;
+
+import com.metanet.metakurly.dto.MemberDTO;
+import org.apache.ibatis.annotations.Mapper;
+
 import java.util.List;
 
 @Mapper
 public interface MemberMapper {
+
 
     //테스트를 위해 회원 정보 읽어오기
     public List<MemberDTO> getList() throws Exception;

@@ -4,6 +4,9 @@ import com.metanet.metakurly.service.MemberService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import com.metanet.metakurly.dto.MemberDTO;
+import com.metanet.metakurly.service.MemberService;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,7 +19,7 @@ public class MemberController {
     private MemberService service;
 
     @GetMapping("")
-    public List<MemberDTO> list() throws Exception{
+    public List<MemberDTO> list() throws Exception {
         return service.getList();
     }
 
@@ -65,4 +68,10 @@ public class MemberController {
         member.setM_id(m_id);
         service.delete(member);
     }
+
+
+//    @PutMapping("/modify/{m_id}")
+//    public void modify(@PathVariable("m_id") Long m_id, @RequestBody MemberDTO member) throws Exception {
+//        service.modify(m_id, member);
+//    }
 }

@@ -1,5 +1,7 @@
 package com.metanet.metakurly.service;
 
+import com.metanet.metakurly.dto.MemberDTO;
+
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
