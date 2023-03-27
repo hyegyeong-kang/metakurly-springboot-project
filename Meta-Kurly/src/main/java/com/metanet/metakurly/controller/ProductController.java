@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -22,27 +23,35 @@ public class ProductController {
 
     @GetMapping("")
     public List<ProductDTO> list() {
-        List<ProductDTO> productDTO = service.getList();
-        List<ReviewDTO> reviewDTO = (List<ReviewDTO>) new ReviewDTO();
+        List<ProductDTO> allProduct = service.getList();
+        List<ReviewDTO> reviewDTO = new ArrayList<>();
 
-        for (int i = 0; i < productDTO.size(); i++) {
-            reviewDTO = rService.getProductReviewList(productDTO.get(i).getP_id());
-            productDTO.get(i).setReviewList(reviewDTO);
+        for (int i = 0; i < allProduct.size(); i++) {
+            reviewDTO = rService.getProductReviewList(allProduct.get(i).getP_id());
+            allProduct.get(i).setReviewList(reviewDTO);
         }
 
-        return productDTO;
+        return allProduct;
     }
 
     @GetMapping("/{p_id}")
     public ProductDTO get(@PathVariable("p_id") Long p_id) {
-        ProductDTO productDTO = service.get(p_id);
+        ProductDTO product = service.get(p_id);
         List<ReviewDTO> reviewDTO = rService.getProductReviewList(p_id);
-        productDTO.setReviewList(reviewDTO);
-        return productDTO;
+        product.setReviewList(reviewDTO);
+        return product;
     }
 
     @GetMapping("/bestList")
     public List<ProductDTO> getBestProductList() {
-        return service.getBestProductList();
+        List<ProductDTO> bestProduct = service.getBestProductList();
+        List<ReviewDTO> reviewDTO = new ArrayList<>();
+
+        for (int i = 0; i < bestProduct.size(); i++) {
+            reviewDTO = rService.getProductReviewList(bestProduct.get(i).getP_id());
+            bestProduct.get(i).setReviewList(reviewDTO);
+        }
+
+        return bestProduct;
     }
 }

@@ -17,8 +17,8 @@
 
 
     <!-- 특정 상품에 해당하는 리뷰 리스트 가져오기 -->
-    <select id="getProductReviewList" resultMap="productMap">
-        select r.r_id, r.m_id, r.review_date, r.contents, r.p_id, p.price, p.name, p.brand, p.img_url, p.delivery_type
+    <select id="getProductReviewList" resultMap="reviewListMap">
+        select r.r_id, r.m_id, r.review_date, r.contents, r.p_id
         from review r left join product p on r.p_id = p.p_id
         left join member m on m.m_id = r.m_id
         where r.p_id = #{p_id}
