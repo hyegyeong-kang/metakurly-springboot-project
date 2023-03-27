@@ -103,10 +103,11 @@ public class CartController {
     }
 
     // ���� ���� �������ִ� ��
-    @PostMapping("/cartUpdate")
-    public String updateCart(HttpSession session, Model model, Long p_id, int quantity) {
-        Long m_id = (Long) session.getAttribute("member");
-        service.updateCart(p_id, m_id, quantity);
+    @PatchMapping("/cartUpdate")
+    public String updateCart(HttpSession session, @RequestParam("p_id") Long p_id, @RequestParam("quantity") int quantity) {
+      //  Long m_id = (Long) session.getAttribute("member");
+        System.out.println("HHHHH" + quantity);
+        service.updateCart(p_id, 1L, quantity);
         return "redirect: /cart/cartUpdate";
     }
 
