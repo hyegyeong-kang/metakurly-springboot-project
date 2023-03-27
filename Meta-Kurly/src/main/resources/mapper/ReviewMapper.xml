@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.metanet.metakurly.mapper.ReviewMapper">
+
+    <!-- 내가 작성한 리뷰 가져오기 -->
+    <select id="getMyReviewList"
+            resultType="com.metanet.metakurly.dto.ReviewDTO">
+
+        <![CDATA[
+        select * from review where m_id = #{m_id}
+     ]]>
+
+    </select>
+
+
+    <!-- 특정 상품에 해당하는 리뷰 리스트 가져오기 -->
+    <select id="getProductReviewList" resultMap="productMap">
+        select r.r_id, r.m_id, r.review_date, r.contents, r.p_id, p.price, p.name, p.brand, p.img_url, p.delivery_type
+        from review r left join product p on r.p_id = p.p_id
+        left join member m on m.m_id = r.m_id
+        where r.p_id = #{p_id}
+    </select>
+
+    <resultMap type="com.metanet.metakurly.dto.ProductDTO" id="productMap">
+        <id property="p_id" column="p_id"/>
+        <result property="price" column="price"/>
+        <result property="name" column="name"/>
+        <result property="brand" column="brand"/>
+        <result property="img_url" column="img_url"/>
+        <result property="delivery_type" column="delivery_type"/>
+        <collection property="reviewList" resultMap="reviewListMap">
+        </collection>
+    </resultMap>
+
+    <resultMap type="com.metanet.metakurly.dto.ReviewDTO" id="reviewListMap">
+        <result property="r_id" column="r_id"/>
+        <result property="review_date" column="review_date"/>
+        <result property="contents" column="contents"/>
+        <result property="m_id" column="m_id"/>
+        <result property="p_id" column="p_id"/>
+    </resultMap>
+
+    <!-- 	   <resultMap type="com.metanet.metakurly.domain.MemberDTO" id="memberMap">
+               <result property="name" column="name"/>
+               <result property="userId" column="userId"/>
+        </resultMap>
+       -->
+
+    <!-- 내가 구매한 상품 리뷰 작성하기 -->
+    <insert id="registerReview">
+        insert into review
+        values (review_seq.nextval, #{m_id}, sysDate, #{contents}, #{p_id})
+    </insert>
+
+
+    <!-- 내가 구매한 상품 리뷰 수정하기 -->
+    <update id="updateReview">
+        update review
+        set contents = #{contents},
+        m_id = #{m_id},
+        p_id = #{p_id},
+        review_date = sysDate
+        where m_id = #{m_id}
+        and r_id = #{r_id}
+        and p_id = #{p_id}
+    </update>
+
+
+    <!-- 내가 구매해서 작성한 리뷰 삭제하기 -->
+    <delete id="deleteReview">
+        delete from review
+        where m_id = #{m_id}
+        and r_id = #{r_id}
+        and p_id = #{p_id}
+    </delete>
+
+</mapper>
