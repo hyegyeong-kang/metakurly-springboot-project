@@ -24,6 +24,11 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public ReviewDTO getProductReviewDetail(Long p_id ,Long r_id) {
+        return mapper.getProductReviewDetail(p_id, r_id);
+    }
+
+    @Override
     public void registerReview(ReviewDTO review) {
         mapper.registerReview(review);
     }
