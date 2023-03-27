@@ -23,15 +23,15 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/cart")
+@RequestMapping("/members")
 @AllArgsConstructor
 public class CartController {
 
     @Autowired
     private CartService service;
 
-    @GetMapping("/cartList")
-    public List<CartDTO> getCartList(HttpSession session) throws Exception {
+    @GetMapping("{m_id}/cart")
+    public List<CartDTO> getCartList(@PathVariable Long m_id, HttpSession session) throws Exception {
        // MemberDTO member = (MemberDTO) session.getAttribute("member");
        //  Long m_id = member.getM_id();
 
@@ -40,10 +40,10 @@ public class CartController {
     }
 
 
-    @PostMapping("/cartAdd")
+    @PostMapping("{m_id}/cart")
     //@RequestMapping(value="/cartAdd", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public boolean addCart(HttpSession session, @RequestBody Map<String, Integer> productInfo) throws Exception {
+    public boolean addCart(HttpSession session, @PathVariable Long m_id, @RequestBody Map<String, Integer> productInfo) throws Exception {
         //MemberDTO member = (MemberDTO) session.getAttribute("member");
         //Long m_id = member.getM_id();
 
@@ -65,8 +65,8 @@ public class CartController {
         return true;
     }
 
-    @DeleteMapping("/cartDelete/{p_id}")
-    public String deleteCart(@PathVariable Long p_id, HttpSession session) throws Exception {
+    @DeleteMapping("{m_id}/cart/{p_id}")
+    public String deleteCart(@PathVariable Long p_id, @PathVariable Long m_id, HttpSession session) throws Exception {
        // Long m_id = (Long) session.getAttribute("member");
         service.deleteCart(p_id, 1L);
 
@@ -81,8 +81,8 @@ public class CartController {
         return "true";
     }
 
-    @PatchMapping("/cartUpdate")
-    public String updateCart(HttpSession session, @RequestBody Map<String, Integer> productInfo) {
+    @PatchMapping("{m_id}/cart")
+    public String updateCart(HttpSession session, @PathVariable Long m_id ,@RequestBody Map<String, Integer> productInfo) {
       //  Long m_id = (Long) session.getAttribute("member");
         Long p_id = Long.valueOf(productInfo.get("p_id"));
         int quantity = productInfo.get("quantity");
