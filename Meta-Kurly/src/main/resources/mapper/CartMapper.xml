@@ -22,12 +22,12 @@
     </resultMap>
 
 
-<!--    <resultMap type="com.metanet.metakurly.dto.ProductDTO" id="productDTO">-->
-<!--        <result property="p_id" column="p_id"/>-->
-<!--        <result property="name" column="name"/>-->
-<!--        <result property="price" column="price"/>-->
-<!--        <result property="img_url" column="img_url"/>-->
-<!--    </resultMap>-->
+    <resultMap type="com.metanet.metakurly.dto.ProductDTO" id="productDTO">
+        <result property="p_id" column="p_id"/>
+        <result property="name" column="name"/>
+        <result property="price" column="price"/>
+        <result property="img_url" column="img_url"/>
+    </resultMap>
 
 
     <!--  장바구니에 물건 추가 -->

@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper
 public interface CartMapper {
     // 해당 회원 장바구니 리스트 출력
-    public List<CartDTO> getMyCartList(Long m_id);
+    List<CartDTO> getMyCartList(Long m_id);
 
     // 해당 회원 장바구니 물건추가
     public void addCart(CartDTO cart);
