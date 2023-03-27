@@ -3,12 +3,14 @@ package com.metanet.metakurly.service;
 
 import com.metanet.metakurly.dto.CartDTO;
 import com.metanet.metakurly.mapper.CartMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class CartServiceImpl implements CartService{
+    @Autowired
     private CartMapper mapper;
 
 
