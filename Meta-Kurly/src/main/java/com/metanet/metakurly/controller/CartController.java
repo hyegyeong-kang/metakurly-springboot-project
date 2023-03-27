@@ -58,7 +58,6 @@ public class CartController {
        // model.addAttribute("list", cartList);
      //   return "cart/cart";
         System.out.println("$$$$$");
-        System.out.println("#######" + service.getMyCartList(1L));
         return service.getMyCartList(1L);
     }
 
@@ -66,7 +65,7 @@ public class CartController {
     @PostMapping("/cartAdd")
     //@RequestMapping(value="/cartAdd", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public boolean addCart(HttpSession session, Model model, @RequestBody Map<String, Integer> productInfo) throws Exception {
+    public boolean addCart(HttpSession session, @RequestBody Map<String, Integer> productInfo) throws Exception {
         //MemberDTO member = (MemberDTO) session.getAttribute("member");
         //Long m_id = member.getM_id();
 
@@ -88,12 +87,12 @@ public class CartController {
         return true;
     }
 
-    @GetMapping("/cartDelete")
-    public String deleteCart(@RequestParam Long p_id, HttpSession session, Model model) throws Exception {
-        Long m_id = (Long) session.getAttribute("member");
-        service.deleteCart(p_id, m_id);
+    @DeleteMapping("/cartDelete/{p_id}")
+    public String deleteCart(@PathVariable Long p_id, HttpSession session) throws Exception {
+       // Long m_id = (Long) session.getAttribute("member");
+        service.deleteCart(p_id, 1L);
 
-        return "redirect:/cart/cartList" + m_id;
+        return "redirect:/cart/cartList" + 1L;
     }
 
     @GetMapping("/cartDeleteAll")
