@@ -3,13 +3,18 @@ package com.metanet.metakurly.service;
 
 import com.metanet.metakurly.dto.CartDTO;
 import com.metanet.metakurly.mapper.CartMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class CartServiceImpl implements CartService{
-    private CartMapper mapper;
+    @Autowired
+    private final CartMapper mapper;
+    public CartServiceImpl(CartMapper mapper) {
+        this.mapper = mapper;
+    }
 
 
     // 해당 회원 장바구니 리스트 출력
