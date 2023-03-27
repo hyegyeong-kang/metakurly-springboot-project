@@ -36,7 +36,7 @@ public class OrderController {
 	private CartService cService;
 
 	/* 주문내역 보기 */
-	@GetMapping("/list")
+	@GetMapping("")
 	public List<OrderDTO> getOrderList(HttpSession session) {
 
 //		MemberDTO member = (MemberDTO) session.getAttribute("member");
@@ -104,9 +104,9 @@ public class OrderController {
 //		payment.setM_id(m_id);
 		service.addOrder(order, payment);
 
-		for(OrderDetailDTO orderDetail : order.getOrderDetailList()) {
-			cService.deleteCart(orderDetail.getP_id(), order.getM_id());
-		}
+//		for(OrderDetailDTO orderDetail : order.getOrderDetailList()) {
+//			cService.deleteCart(orderDetail.getP_id(), order.getM_id());
+//		}
 
 //		order = service.getOrderDetailList(order.getO_id());
 

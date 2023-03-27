@@ -74,7 +74,7 @@ public class OrderServiceImpl implements OrderService {
 		for(OrderProductDTO product : orderProducts) {
 			OrderDetailDTO detailDto = new OrderDetailDTO();
 			detailDto.setP_id(product.getP_id());
-			detailDto.setProductDTO(productMapper.read(product.getP_id()));
+//			detailDto.setProductDTO(productMapper.read(product.getP_id()));
 			detailDto.setQuantity(product.getQuantity());
 			list.add(detailDto);
 		}
