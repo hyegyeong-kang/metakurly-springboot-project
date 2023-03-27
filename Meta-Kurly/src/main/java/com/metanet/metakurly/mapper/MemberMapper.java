@@ -1,8 +1,6 @@
 package com.metanet.metakurly.mapper;
 
-import com.metanet.metakurly.dto.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;

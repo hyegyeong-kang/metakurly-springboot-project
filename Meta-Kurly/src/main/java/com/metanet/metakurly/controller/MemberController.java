@@ -1,12 +1,9 @@
 package com.metanet.metakurly.controller;
 
-import com.metanet.metakurly.dto.MemberDTO;
 import com.metanet.metakurly.service.MemberService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

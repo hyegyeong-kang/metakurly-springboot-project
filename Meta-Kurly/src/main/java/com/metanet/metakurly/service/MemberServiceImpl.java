@@ -1,8 +1,6 @@
 package com.metanet.metakurly.service;
 
-import com.metanet.metakurly.dto.MemberDTO;
 import com.metanet.metakurly.mapper.MemberMapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
