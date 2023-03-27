@@ -2,13 +2,15 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
 <mapper namespace="com.metanet.metakurly.mapper.MemberMapper">
-    
-    <select id="getList" resultType="com.metanet.metakurly.dto.MemberDTO">
+
+    <select id="getList" resultType="MemberDTO">
         select * from member
     </select>
 
+    <select id="getMemberByUserId" resultType="MemberDTO">
+        select * from member where userid = #{userId}
+    </select>
 
     <insert id="signUp">
         insert into member (m_id, userid, password, name, email, phone, address)
@@ -21,7 +23,7 @@
         where userid = #{userId}
     </select>
 
-    <select id="login" resultType="com.metanet.metakurly.dto.MemberDTO">
+    <select id="login" resultType="MemberDTO">
         select *
         from member
         where userid = #{userId}
@@ -37,7 +39,7 @@
         where m_id = #{m_id}
     </update>
 
-    <update id="delete" >
+    <update id="delete">
         update member
         set status = #{status}
         where m_id = #{m_id}
