@@ -2,19 +2,24 @@ package com.metanet.metakurly.controller;
 
 import com.metanet.metakurly.dto.ProductDTO;
 import com.metanet.metakurly.dto.ReviewDTO;
+import com.metanet.metakurly.service.ProductService;
 import com.metanet.metakurly.service.ReviewService;
 import lombok.AllArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/products")
 @AllArgsConstructor
 public class ReviewController {
     private ReviewService service;
+
+    private ProductService productService;
 //    private MemberService mService;
 
     @GetMapping("/{p_id}/reviews")
@@ -23,13 +28,16 @@ public class ReviewController {
         return productReview;
     }
 
-    /* 수정 필요 */
     @GetMapping("/{p_id}/reviews/{r_id}")
-    public List<ReviewDTO> showReviewDetail(@PathVariable("p_id") Long p_id, @PathVariable("r_id") Long r_id) {
+    public Map<String, Object> showReviewDetail(@PathVariable("p_id") Long p_id, @PathVariable("r_id") Long r_id) {
 
-        List<ReviewDTO> productReview = service.getProductReviewList(p_id);
+        ReviewDTO productReview = service.getProductReviewDetail(p_id, r_id);
+        ProductDTO productDTO = productService.get(p_id);
+        Map<String, Object> map = new HashMap<>();
+        map.put("productReview", productReview);
+        map.put("productDTO", productDTO);
 
-        return productReview;
+        return map;
     }
 
     @GetMapping("/reviews")

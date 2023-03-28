@@ -10,6 +10,8 @@ public interface ReviewService {
 
     public List<ReviewDTO> getProductReviewList(Long p_id);
 
+    public ReviewDTO getProductReviewDetail(Long p_id, Long r_id);
+
     public void registerReview(ReviewDTO review);
 
     public int totalMyReviewList(int memberUid);

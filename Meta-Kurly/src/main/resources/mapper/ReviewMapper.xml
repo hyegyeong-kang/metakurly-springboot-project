@@ -15,13 +15,20 @@
 
     </select>
 
-
     <!-- 특정 상품에 해당하는 리뷰 리스트 가져오기 -->
     <select id="getProductReviewList" resultMap="reviewListMap">
         select r.r_id, r.m_id, r.review_date, r.contents, r.p_id
         from review r left join product p on r.p_id = p.p_id
         left join member m on m.m_id = r.m_id
         where r.p_id = #{p_id}
+    </select>
+
+    <!-- 특정 상품에 대한 특정 리뷰 상세 보기 -->
+    <select id="getProductReviewDetail" resultMap="reviewListMap">
+        select r.r_id, r.m_id, r.review_date, r.contents, r.p_id,
+        p.brand, p.name, p.delivery_type, p.img_url
+        from review r left join product p on r.p_id = p.p_id
+        where r.r_id = #{r_id} and r.p_id = #{p_id}
     </select>
 
     <resultMap type="com.metanet.metakurly.dto.ProductDTO" id="productMap">
