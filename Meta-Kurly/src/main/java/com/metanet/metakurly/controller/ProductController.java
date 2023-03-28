@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -40,13 +42,27 @@ public class ProductController {
     }
 
     @GetMapping("/{p_id}")
-    public EntityModel<ProductDTO> get(@PathVariable("p_id") Long p_id) {
+    public EntityModel<Map<String, Object>> get(@PathVariable("p_id") Long p_id) {
         ProductDTO product = service.get(p_id);
-        List<ReviewDTO> reviewDTO = rService.getProductReviewList(p_id);
-        product.setReviewList(reviewDTO);
-        return EntityModel.of(product,
-                linkTo(methodOn(ProductController.class).list()).withRel("all-products"));
+        List<ReviewDTO> reviews = rService.getProductReviewList(p_id);
+        product.setReviewList(reviews);
+        Map<String, Object> map = new HashMap<>();
+        map.put("product", product);
+        map.put("reviews", reviews);
+
+        return EntityModel.of(map,
+                linkTo(methodOn(ProductController.class).list()).withRel("all-products"),
+                linkTo(methodOn(ReviewController.class).showProductReview(p_id)).withRel("all-product-reviews"));
     }
+
+//    @GetMapping("/{p_id}")
+//    public EntityModel<ProductDTO> get(@PathVariable("p_id") Long p_id) {
+//        ProductDTO product = service.get(p_id);
+//        List<ReviewDTO> reviewDTO = rService.getProductReviewList(p_id);
+//        product.setReviewList(reviewDTO);
+//        return EntityModel.of(product,
+//                linkTo(methodOn(ProductController.class).list()).withRel("all-products"));
+//    }
 
     @GetMapping("/bestList")
     public List<ProductDTO> getBestProductList() {
