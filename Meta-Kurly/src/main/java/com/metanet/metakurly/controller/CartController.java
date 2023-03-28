@@ -41,7 +41,6 @@ public class CartController {
 
 
     @PostMapping("{m_id}/cart")
-    //@RequestMapping(value="/cartAdd", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public boolean addCart(HttpSession session, @PathVariable Long m_id, @RequestBody Map<String, Integer> productInfo) throws Exception {
         //MemberDTO member = (MemberDTO) session.getAttribute("member");
