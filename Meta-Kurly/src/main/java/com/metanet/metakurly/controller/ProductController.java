@@ -55,15 +55,6 @@ public class ProductController {
                 linkTo(methodOn(ReviewController.class).showProductReview(p_id)).withRel("all-product-reviews"));
     }
 
-//    @GetMapping("/{p_id}")
-//    public EntityModel<ProductDTO> get(@PathVariable("p_id") Long p_id) {
-//        ProductDTO product = service.get(p_id);
-//        List<ReviewDTO> reviewDTO = rService.getProductReviewList(p_id);
-//        product.setReviewList(reviewDTO);
-//        return EntityModel.of(product,
-//                linkTo(methodOn(ProductController.class).list()).withRel("all-products"));
-//    }
-
     @GetMapping("/bestList")
     public List<ProductDTO> getBestProductList() {
         List<ProductDTO> bestProduct = service.getBestProductList();
