@@ -8,6 +8,8 @@ import java.util.List;
 
 @Data
 public class RequestPayment {
+
+    private Long o_id;
     private int total_amount;
     private int price;
     private Long m_id;

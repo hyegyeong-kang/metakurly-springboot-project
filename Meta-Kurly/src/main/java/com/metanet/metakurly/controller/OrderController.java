@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import com.metanet.metakurly.dto.*;
+import com.metanet.metakurly.service.MemberService;
 import com.metanet.metakurly.vo.RequestPayment;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -19,7 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-//import com.metanet.metakurly.dto.MemberDTO;
+import com.metanet.metakurly.dto.MemberDTO;
 import com.metanet.metakurly.service.CartService;
 import com.metanet.metakurly.service.OrderService;
 import com.metanet.metakurly.service.ProductService;
@@ -28,49 +29,102 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/members")
-@AllArgsConstructor
 public class OrderController {
+
+	private RequestPayment request;
 
 	private OrderService service;
 
 	private CartService cService;
 
+	private MemberService mService;
+
+	public OrderController(OrderService service, CartService cService, MemberService mService) {
+		this.service = service;
+		this.cService = cService;
+		this.mService = mService;
+	}
+
 	/* 주문내역 보기 */
 	@GetMapping("{m_id}/orders")
-	public List<OrderDTO> getOrderList(@PathVariable("m_id") Long m_id, HttpSession session) {
+	public ResponseEntity<List<OrderDTO>> getOrderList(@PathVariable("m_id") Long m_id, HttpSession session) throws Exception {
 
 //		MemberDTO member = (MemberDTO) session.getAttribute("member");
 //		Long m_id = member.getM_id();
 
-		return service.getOrderList(m_id);
+		MemberDTO memberDTO = mService.getMemberById(m_id);
+		HttpStatus status;
+
+		if(memberDTO == null){
+			status = HttpStatus.NOT_FOUND;
+		} else{
+			status = HttpStatus.OK;
+		}
+
+		return ResponseEntity.status(status).body(service.getOrderList(m_id));
 	}
 
 	/* 주문 상세 보기(+ 결제 정보) */
 	@GetMapping("{m_id}/orders/{o_id}")
-	public ResponseEntity<Map<String, Object>> getOrderDetail(@PathVariable("m_id") Long m_id, @PathVariable("o_id") Long o_id) {
+	public ResponseEntity<Map<String, Object>> getOrderDetail(@PathVariable("m_id") Long m_id,
+															  @PathVariable("o_id") Long o_id)
+			throws Exception{
 
 		OrderDTO orderDTO = service.getOrderDetailList(o_id);
 		PaymentDTO paymentDTO = service.getPayment(o_id);
+
+		MemberDTO memberDTO = mService.getMemberById(m_id);
+		HttpStatus status;
+
+		if(memberDTO == null || orderDTO == null){
+			status = HttpStatus.NOT_FOUND;
+		} else{
+			status = HttpStatus.OK;
+		}
 
 		Map<String, Object> response = new HashMap<>();
 		response.put("order", orderDTO);
 		response.put("payment", paymentDTO);
 
-		return ResponseEntity.status(HttpStatus.OK).body(response);
+		return ResponseEntity.status(status).body(response);
 	}
 
 	/* 주문서 */
 	@PostMapping("{m_id}/orders")
-	public List<OrderProductDTO> orderProduct(@PathVariable("m_id") Long m_id, @RequestBody OrderProductDTO orderProduct) {
+	public ResponseEntity<List<OrderProductDTO>> orderProduct(@PathVariable("m_id") Long m_id,
+															  @RequestBody OrderProductDTO orderProduct)
+			throws Exception{
 
 		List<OrderProductDTO> orderProducts = orderProduct.getOrderProductList();
 
-		return service.getProductsInfo(orderProducts);
+		MemberDTO memberDTO = mService.getMemberById(m_id);
+		HttpStatus status;
+
+		if(memberDTO == null || orderProduct == null){
+			status = HttpStatus.NOT_FOUND;
+		} else{
+			status = HttpStatus.OK;
+		}
+
+		return ResponseEntity.status(status).body(service.getProductsInfo(orderProducts));
 	}
 
 	/* 결제하기 */
 	@PostMapping("/{m_id}/orders/payment")
-	public ResponseEntity<Map<String, Object>> payment(@PathVariable("m_id") Long m_id, @RequestBody RequestPayment requestPayment) {
+	public ResponseEntity<Map<String, Object>> payment(@PathVariable("m_id") Long m_id,
+													   @RequestBody RequestPayment requestPayment)
+			throws Exception {
+
+		MemberDTO memberDTO = mService.getMemberById(m_id);
+		HttpStatus status;
+
+		if(memberDTO == null || requestPayment == null){
+			status = HttpStatus.NOT_FOUND;
+		} else{
+			status = HttpStatus.OK;
+		}
+
+		request = requestPayment;
 
 		ModelMapper mapper = new ModelMapper();
 		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
@@ -100,8 +154,10 @@ public class OrderController {
 //		order.setTotal_amount(total_quantity); // 전달할 때 보내면 더 좋을듯
 		order.setOrderDetailList(list);
 
-		payment.setM_id(m_id);
+		//payment.setM_id(m_id);
+		//System.out.println("!!!!!!!! " + payment);
 		service.addOrder(order, payment);
+		request.setO_id(order.getO_id());
 
 		for(OrderDetailDTO orderDetail : order.getOrderDetailList()) {
 			cService.deleteCart(orderDetail.getP_id(), order.getM_id());
@@ -114,7 +170,31 @@ public class OrderController {
 		response.put("payment", payment);
 		response.put("deliveryMsg", requestPayment.getDeliveryMsg());
 
+
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
+	}
+
+	/* 결제 성공 화면 */
+	@GetMapping("/{m_id}/orders/payment")
+	public ResponseEntity<Map<String, Object>> getPayment(@PathVariable("m_id") Long m_id) {
+		System.out.println(request);
+		Long o_id = request.getO_id();
+		OrderDTO order = service.getOrder(o_id);
+		List<OrderDetailDTO> list = service.getOrderDetailsInfo(request.getOrderProductList());
+		PaymentDTO payment = service.getPayment(o_id);
+
+		System.out.println(order);
+		System.out.println(list);
+		System.out.println(payment);
+		System.out.println(request.getDeliveryMsg());
+
+		Map<String, Object> response = new HashMap<>();
+		response.put("order", order);
+		response.put("products", list);
+		response.put("payment", payment);
+		response.put("deliveryMsg", request.getDeliveryMsg());
+
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
 	/* 주문 취소 */
@@ -125,9 +205,13 @@ public class OrderController {
 		OrderDTO orderDTO = null;
 		PaymentDTO paymentDTO = null;
 
+		HttpStatus status = HttpStatus.NOT_FOUND;
+
 		if(service.cancelOrder(o_id) == 1){
 			orderDTO = service.getOrderDetailList(o_id);
 			paymentDTO = service.getPayment(o_id);
+		} else{
+
 		}
 
 		response.put("order", orderDTO);

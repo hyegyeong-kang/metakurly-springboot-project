@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface OrderService {
 
+	public OrderDTO getOrder(Long o_id);
+
 	public OrderDTO getOrderDetailList(Long o_id);
 	
 	public List<OrderDTO> getOrderList(Long m_id);
