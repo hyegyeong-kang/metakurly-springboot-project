@@ -1,5 +1,6 @@
 package com.metanet.metakurly.exception;
 
+import com.metanet.metakurly.vo.ExceptionResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

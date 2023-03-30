@@ -1,4 +1,4 @@
-package com.metanet.metakurly.exception;
+package com.metanet.metakurly.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
