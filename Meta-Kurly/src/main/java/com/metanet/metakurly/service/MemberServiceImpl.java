@@ -39,6 +39,12 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
+    public MemberDTO getMemberById(Long m_id) throws Exception {
+        return mapper.getMemberById(m_id);
+    }
+
+
+    @Override
     public MemberDTO login(MemberDTO member) throws Exception {
         return mapper.login(member);
     }

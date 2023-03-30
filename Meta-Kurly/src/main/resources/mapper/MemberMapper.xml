@@ -12,6 +12,10 @@
         select * from member where userid = #{userId}
     </select>
 
+    <select id="getMemberById" resultType="MemberDTO">
+        select * from member where m_id = #{m_id}
+    </select>
+
     <insert id="signUp">
         insert into member (m_id, userid, password, name, email, phone, address)
         values (member_seq.nextval, #{userId}, #{password}, #{name}, #{email}, #{phone}, #{address})

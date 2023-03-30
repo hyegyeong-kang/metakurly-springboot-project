@@ -16,6 +16,8 @@ public interface MemberService extends UserDetailsService {
 
     public MemberDTO getMemberByUserId(String userId) throws Exception;
 
+    public MemberDTO getMemberById(Long m_id) throws Exception;
+
     //로그인
     public MemberDTO login(MemberDTO member) throws Exception;
 
